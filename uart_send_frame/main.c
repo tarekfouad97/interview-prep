@@ -6,17 +6,22 @@
 #define odd  1
 
 char UART_parityCheck(unsigned char data){
-    data^=data>>4;
-    data^=data>>2;
-    data^=data>>1;
+    unsigned char count;
+    for(int i=0 ;i<8;i++){
+        if(data&(1<<i)){
+            count++;
+        }
+        else {
+            //error
+        }
+    }
 
-    #if     parity_type == even
-            return (~data)&1;
-    #elif   parity_type == odd
-            return (data)&1;
-    #else
-        /*Error*/
-    #endif
+    if (count%2==0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 int UART_sendFrame(unsigned char data){
     unsigned int  frame  = 0;
@@ -24,23 +29,30 @@ int UART_sendFrame(unsigned char data){
     unsigned char parity = UART_parityCheck(data);
     unsigned char stop   = 1;
 
-    // /*0+data+parity+stop*/
-    // frame =  (frame&(start<<9))  
-    frame = 67;
-    printf("%d\n", parity);
+     frame |=   (start<<7);
+     frame |=   (data<<2);
+     frame |=   (parity<<1);
+     frame |=   (stop<<0);  
+
+     printf("%d\n", parity);
+     printf("%d\n",frame);
+  
+    return frame;
+}
+
+int main(void){
+    unsigned char data = 0b11001;
+    unsigned int x=UART_sendFrame(data);
+    
     printf("0b");
-    for(int i=0 ;i<8;i++){
-        if(frame&(1<<i)){
-            printf("%d", 1);
-        }
+    for(int i=0;i<(sizeof(x)*4);i++){
+		if((x&(1<<i))){
+			printf("%d", 1);
+		}
+
         else {
             printf("%d", 0);
         }
     }
-}
-
-int main(void){
-    unsigned char data = 0b1100110;
-    UART_sendFrame(data);
 
 }
