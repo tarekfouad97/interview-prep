@@ -29,7 +29,7 @@ int UART_sendFrame(unsigned char data){
     unsigned char parity = UART_parityCheck(data);
     unsigned char stop   = 1;
 
-     frame |=   (start<<7);
+     frame |=   (start<<8);
      frame |=   (data<<2);
      frame |=   (parity<<1);
      frame |=   (stop<<0);  
@@ -45,7 +45,7 @@ int main(void){
     unsigned int x=UART_sendFrame(data);
     
     printf("0b");
-    for(int i=0;i<(sizeof(x)*4);i++){
+    for(int i=(sizeof(x)*4);i>0;i--){
 		if((x&(1<<i))){
 			printf("%d", 1);
 		}
