@@ -31,43 +31,39 @@ int isFull()
 
 void push(int data)
 {
-    if (isFull() == 1)
+    if (!isFull())
     {
-        printf("Error Stack is Full!\n");
-    }
-    else if (isFull() == 0)
-    {   top++;
+        top++;
         stack[top] = data;
         
+    }
+    else
+    {
+        printf("Error Stack is Full!\n");
     }
 }
 
 int pop(void)
 {
     int data;
-    if (isEmpty() == 1)
+    if (!isEmpty())
     {
-        printf("Error Stack is Empty!\n");
+    
+    data = stack[top];
+    top--;
+    return data;    
     }
-    else if (isEmpty() == 0)
+    else
     {
-        data = stack[top];
-        top--;
+          printf("Error Stack is Empty!\n");
     }
-    return data;
+    
 }
 
 int peek()
 {
-    if (isEmpty)
-    {
-        printf("Stack is Empty!\n");
-        return 0;
-    }
-    else
-    {
-        return stack[top];
-    }
+
+    return stack[top];
 }
 int main(void)
 {
@@ -77,9 +73,10 @@ int main(void)
     push(14);
     pop();
     push(15);
-    printf("top = %d\n",stack[1]);
+    printf("top = %d\n", peek());
     pop();
     pop();
     pop();
-    printf("top = %d\n",peek());
+    
+    printf("top = %d\n", peek());
 }
